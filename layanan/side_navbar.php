@@ -7,8 +7,8 @@
                 <a href="tambah_transaksi.php" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition">
                     <i class="fa-solid fa-receipt"></i> Tambah Transaksi
                 </a>
-                <a href="layanan.php" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition">
-                    <i class="fa-solid fa-receipt"></i> Layanan
+                <a href="riwayat_transaksi.php" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition">
+                    <i class="fa-solid fa-receipt"></i> Riwayat Transaksi
                 </a>
                 <a href="kontak.php" class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 rounded-2xl transition">
                     <i class="fa-solid fa-headset"></i> Bantuan
