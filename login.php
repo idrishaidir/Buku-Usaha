@@ -1,6 +1,6 @@
 <?php 
 // Memulai session untuk pengecekan login (Konsisten dengan config/database.php)
-include 'config.php'; 
+include 'config/database.php'; 
 
 if (isset($_POST['login'])) {
     // Logika backend sederhana (Konsisten dengan file login.php lama)

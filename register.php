@@ -1,6 +1,6 @@
 <?php 
 // 1. Integrasi Database
-include 'config/database.php'; // Menggunakan koneksi database yang sudah ada
+include 'config/database.php';
 
 if (isset($_POST['register'])) {
     // Tangkap data dan bersihkan
