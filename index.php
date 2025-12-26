@@ -235,7 +235,7 @@ session_start();
                     <h5 class="font-bold mb-6 text-slate-900 uppercase text-xs tracking-widest">Navigasi Cepat</h5>
                     <ul class="space-y-4 text-sm font-medium text-slate-500">
                         <li><a href="index.php" class="hover:text-blue-600 transition">Beranda</a></li>
-                        <li><a href="layanan.php" class="hover:text-blue-600 transition">Layanan</a></li>
+                        <li><a href="dashboard.php" class="hover:text-blue-600 transition">Layanan</a></li>
                         <li><a href="tentang.php" class="hover:text-blue-600 transition">Tentang Kami</a></li>
                         <li><a href="kontak.php" class="hover:text-blue-600 transition">Kontak</a></li>
                     </ul>

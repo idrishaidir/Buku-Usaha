@@ -1,23 +1,37 @@
 <?php 
-// Memulai session untuk pengecekan login (Konsisten dengan config/database.php)
-include 'config/database.php'; 
+// Pastikan session_start adalah hal pertama yang dieksekusi
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+include '../config/database.php'; 
 
 if (isset($_POST['login'])) {
-    // Logika backend sederhana (Konsisten dengan file login.php lama)
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $password = $_POST['password'];
+    
+    // Debugging: uncomment baris di bawah jika masih error untuk cek koneksi
+    // if (!$conn) { die("Koneksi gagal: " . mysqli_connect_error()); }
+
     $result = mysqli_query($conn, "SELECT * FROM users WHERE email = '$email'");
     
-    if (mysqli_num_rows($result) === 1) {
+    if ($result && mysqli_num_rows($result) === 1) {
         $row = mysqli_fetch_assoc($result);
         if (password_verify($password, $row['password'])) {
+            // Set session dengan benar
             $_SESSION['user_id'] = $row['id'];
             $_SESSION['nama_usaha'] = $row['nama_usaha'];
+            
+            // Gunakan session_write_close sebelum redirect untuk memastikan session tersimpan
+            session_write_close();
             header("Location: layanan.php");
             exit();
+        } else {
+            $error = "Password salah!";
         }
+    } else {
+        $error = "Email tidak terdaftar!";
     }
-    $error = "Email atau Password tidak sesuai!";
 }
 ?>
 <!DOCTYPE html>

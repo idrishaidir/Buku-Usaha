@@ -27,14 +27,14 @@
             
             <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
                 <a href="index.php" class="hover:text-blue-600 transition">Beranda</a>
-                <a href="layanan.php" class="hover:text-blue-600 transition">Layanan</a>
+                <a href="dashboard.php" class="hover:text-blue-600 transition">Layanan</a>
                 <a href="tentang.php" class="hover:text-blue-600 transition">Tentang Kami</a>
                 <a href="kontak.php" class="hover:text-blue-600 transition">Kontak</a>
             </div>
     
             <div class="flex items-center gap-4">
                 <?php if(isset($_SESSION['user_id'])): ?>
-                    <a href="layanan.php" class="bg-gradient-custom text-white px-6 py-2.5 rounded-xl font-bold hover:opacity-90 transition shadow-lg shadow-blue-200">Dashboard</a>
+                    <a href="layanan/dashboard.php" class="bg-gradient-custom text-white px-6 py-2.5 rounded-xl font-bold hover:opacity-90 transition shadow-lg shadow-blue-200">Dashboard</a>
                     <a href="logout.php" class="hidden md:block font-bold text-red-500 hover:text-red-700 transition">Logout</a>
                 <?php else: ?>
                     <a href="login.php" class="hidden md:block font-bold text-slate-600 hover:text-blue-600 transition">Masuk</a>
@@ -50,7 +50,7 @@
         <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-6 right-6 bg-white rounded-2xl shadow-2xl p-6 border border-slate-100">
             <div class="flex flex-col space-y-4 font-semibold">
                 <a href="index.php">Beranda</a>
-                <a href="layanan.php">Layanan</a>
+                <a href="layanan/dashboard.php">Layanan</a>
                 <a href="tentang.php">Tentang Kami</a>
                 <a href="kontak.php">Kontak</a>
                 <hr>
