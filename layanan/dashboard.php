@@ -112,7 +112,7 @@ $nama_usaha = $_SESSION['nama_usaha'];
                             <a href="tambah_transaksi.php" class="flex items-center justify-center gap-2 w-full py-4 bg-blue-600 text-white rounded-2xl font-bold hover:scale-[1.02] transition shadow-lg shadow-blue-200">
                                 <i class="fa-solid fa-plus"></i> Tambah Transaksi
                             </a>
-                            <a href="#" class="flex items-center justify-center gap-2 w-full py-4 bg-slate-50 text-slate-700 rounded-2xl font-bold hover:bg-slate-100 transition">
+                            <a href="laporan.php" class="flex items-center justify-center gap-2 w-full py-4 bg-slate-50 text-slate-700 rounded-2xl font-bold hover:bg-slate-100 transition">
                                 <i class="fa-solid fa-file-invoice-dollar"></i> Cetak Laporan
                             </a>
                         </div>

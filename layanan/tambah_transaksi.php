@@ -26,7 +26,7 @@ $user_id = $_SESSION['user_id'];
 <body class="bg-[#F8FAFC] min-h-screen pb-20">
     <div class="container mx-auto px-4">
         <div class="max-w-2xl mx-auto">
-            
+            <?php include 'side_navbar.php'; ?>
             <div class="mb-8 flex justify-between items-end">
                 <div>
                     <h1 class="text-3xl font-extrabold text-slate-900">Catat Transaksi</h1>
