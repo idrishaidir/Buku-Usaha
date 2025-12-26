@@ -24,44 +24,7 @@ session_start();
 </head>
 <body class="bg-slate-50 text-slate-900 overflow-x-hidden">
 
-    <nav class="fixed w-full z-50 top-0 px-6 py-4">
-        <div class="max-w-7xl mx-auto glass rounded-2xl border border-white/40 shadow-lg px-6 py-3 flex justify-between items-center">
-            <a href="index.php" class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                BukuUsaha.id
-            </a>
-            
-            <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
-                <a href="index.php" class="text-blue-600">Beranda</a>
-                <a href="layanan.php" class="hover:text-blue-600 transition">Layanan</a>
-                <a href="tentang.php" class="hover:text-blue-600 transition">Tentang Kami</a>
-                <a href="kontak.php" class="hover:text-blue-600 transition">Kontak</a>
-            </div>
-
-            <div class="flex items-center gap-4">
-                <?php if(isset($_SESSION['user_id'])): ?>
-                    <a href="layanan.php" class="bg-gradient-custom text-white px-6 py-2.5 rounded-xl font-bold hover:opacity-90 transition shadow-lg shadow-blue-200">Dashboard</a>
-                <?php else: ?>
-                    <a href="login.php" class="hidden md:block font-bold text-slate-600 hover:text-blue-600 transition">Masuk</a>
-                    <a href="register.php" class="bg-gradient-custom text-white px-6 py-2.5 rounded-xl font-bold hover:scale-105 transition shadow-lg shadow-blue-200">Daftar</a>
-                <?php endif; ?>
-                
-                <button class="md:hidden text-slate-600" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
-                    <i class="fa-solid fa-bars-staggered text-xl"></i>
-                </button>
-            </div>
-        </div>
-        
-        <div id="mobile-menu" class="hidden md:hidden absolute top-20 left-6 right-6 bg-white rounded-2xl shadow-2xl p-6 border border-slate-100">
-            <div class="flex flex-col space-y-4 font-semibold">
-                <a href="index.php" class="text-blue-600">Beranda</a>
-                <a href="layanan.php">Layanan</a>
-                <a href="tentang.php">Tentang Kami</a>
-                <a href="kontak.php">Kontak</a>
-                <hr>
-                <a href="login.php" class="text-center py-2">Masuk</a>
-            </div>
-        </div>
-    </nav>
+    <?php include 'navbar.php'; ?>
 
     <section class="relative pt-40 pb-20 overflow-hidden">
         <div class="absolute top-0 right-0 -z-10 w-[500px] h-[500px] bg-blue-100 rounded-full blur-3xl opacity-50 -mr-40 -mt-20"></div>

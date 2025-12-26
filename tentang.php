@@ -16,30 +16,13 @@ session_start();
         .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
         .bg-gradient-soft { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
         .card-hover:hover { transform: translateY(-10px); transition: all 0.3s ease; }
+
+        
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 overflow-x-hidden">
 
-    <nav class="fixed w-full z-50 top-0 px-6 py-4">
-        <div class="max-w-7xl mx-auto glass rounded-2xl border border-white/40 shadow-lg px-6 py-3 flex justify-between items-center">
-            <a href="index.php" class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                BukuUsaha.id
-            </a>
-            <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
-                <a href="index.php" class="hover:text-blue-600 transition">Beranda</a>
-                <a href="layanan.php" class="hover:text-blue-600 transition">Layanan</a>
-                <a href="tentang.php" class="text-blue-600">Tentang Kami</a>
-                <a href="kontak.php" class="hover:text-blue-600 transition">Kontak</a>
-            </div>
-            <div>
-                <?php if(isset($_SESSION['user_id'])): ?>
-                    <a href="layanan.php" class="bg-gradient-soft text-white px-6 py-2.5 rounded-xl font-bold hover:opacity-90 transition shadow-lg shadow-blue-200">Dashboard</a>
-                <?php else: ?>
-                    <a href="login.php" class="bg-gradient-soft text-white px-6 py-2.5 rounded-xl font-bold hover:scale-105 transition shadow-lg shadow-blue-200">Login</a>
-                <?php endif; ?>
-            </div>
-        </div>
-    </nav>
+    <?php include 'navbar.php'; ?>
 
     <section class="relative pt-48 pb-32 overflow-hidden bg-slate-900">
         <div class="absolute top-0 left-0 w-full h-full opacity-20">
