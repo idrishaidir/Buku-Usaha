@@ -1,91 +1,221 @@
-<?php include 'config.php'; ?>
+<?php
+// Memulai session jika diperlukan (konsisten dengan halaman lain)
+session_start();
+?>
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <title>Tentang Kami - BukuUsaha.id</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
+        .bg-gradient-soft { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
+        .card-hover:hover { transform: translateY(-10px); transition: all 0.3s ease; }
+    </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-slate-50 text-slate-900 overflow-x-hidden">
 
-    <nav class="fixed w-full z-30 top-0 bg-white shadow-md">
-        <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-4 px-6">
-            <a class="text-blue-600 font-bold text-2xl" href="index.php">BukuUsaha.id</a>
-            <div class="hidden md:flex items-center space-x-8 text-sm font-semibold">
-                <a class="text-gray-600 hover:text-blue-600" href="index.php">Beranda</a>
-                <a class="text-gray-600 hover:text-blue-600" href="layanan.php">Layanan</a>
-                <a class="text-blue-600" href="tentang.php">Tentang Kami</a>
-                <a class="text-gray-600 hover:text-blue-600" href="kontak.php">Kontak</a>
+    <nav class="fixed w-full z-50 top-0 px-6 py-4">
+        <div class="max-w-7xl mx-auto glass rounded-2xl border border-white/40 shadow-lg px-6 py-3 flex justify-between items-center">
+            <a href="index.php" class="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                BukuUsaha.id
+            </a>
+            <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
+                <a href="index.php" class="hover:text-blue-600 transition">Beranda</a>
+                <a href="layanan.php" class="hover:text-blue-600 transition">Layanan</a>
+                <a href="tentang.php" class="text-blue-600">Tentang Kami</a>
+                <a href="kontak.php" class="hover:text-blue-600 transition">Kontak</a>
             </div>
-            <a href="login.php" class="bg-blue-600 text-white px-6 py-2 rounded-full font-bold hover:bg-blue-700 transition">Login</a>
+            <div>
+                <?php if(isset($_SESSION['user_id'])): ?>
+                    <a href="layanan.php" class="bg-gradient-soft text-white px-6 py-2.5 rounded-xl font-bold hover:opacity-90 transition shadow-lg shadow-blue-200">Dashboard</a>
+                <?php else: ?>
+                    <a href="login.php" class="bg-gradient-soft text-white px-6 py-2.5 rounded-xl font-bold hover:scale-105 transition shadow-lg shadow-blue-200">Login</a>
+                <?php endif; ?>
+            </div>
         </div>
     </nav>
 
-    <section class="pt-32 pb-12 bg-blue-600 text-white text-center">
-        <div class="container mx-auto px-6">
-            <h1 class="text-4xl font-bold mb-4">Tentang Kami</h1>
-            <p class="text-xl opacity-90">Mengenal lebih dekat solusi akuntansi untuk masa depan UMKM Indonesia.</p>
+    <section class="relative pt-48 pb-32 overflow-hidden bg-slate-900">
+        <div class="absolute top-0 left-0 w-full h-full opacity-20">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-blue-600 rounded-full blur-[120px] -mr-40 -mt-20"></div>
+            <div class="absolute bottom-0 left-0 w-80 h-80 bg-purple-600 rounded-full blur-[120px] -ml-20 -mb-20"></div>
+        </div>
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-6">
+                Membantu UMKM Mengelola <br>
+                <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Keuangan Lebih Baik</span>
+            </h1>
+            <p class="text-slate-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+                BukuUsaha.id hadir sebagai mitra strategis bagi pelaku usaha mikro, kecil, dan menengah untuk bertransformasi dari pembukuan manual ke ekosistem digital yang akurat.
+            </p>
         </div>
     </section>
 
-    <section class="py-16 container mx-auto px-6">
-        <div class="flex flex-col md:flex-row items-center gap-12">
-            <div class="md:w-1/2">
-                <img src="https://img.freepik.com/free-vector/team-goals-concept-illustration_114360-5151.jpg" alt="Tentang BukuUsaha" class="rounded-xl">
-            </div>
-            <div class="md:w-1/2">
-                <h2 class="text-3xl font-bold text-gray-900 mb-6">Misi Kami untuk UMKM</h2>
-                <p class="text-gray-600 mb-4 leading-relaxed">
-                    <strong>BukuUsaha.id</strong> hadir sebagai respons atas tantangan yang dihadapi oleh jutaan pelaku UMKM di Indonesia dalam mengelola administrasi keuangan. Kami percaya bahwa data keuangan yang rapi adalah fondasi bagi bisnis untuk berkembang dan naik kelas.
-                </p>
-                <p class="text-gray-600 leading-relaxed">
-                    Kami menyediakan platform yang tidak hanya berfungsi sebagai alat pencatatan, tetapi juga sebagai mitra digital dalam menyusun laporan keuangan yang akuntabel dan profesional.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section class="bg-white py-20 border-t">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
-                <div class="bg-blue-50 p-8 rounded-2xl">
-                    <h3 class="text-2xl font-bold text-blue-600 mb-4">Visi</h3>
-                    <p class="text-gray-700 italic">"Menjadi platform akuntansi digital nomor satu bagi UMKM Indonesia dalam mewujudkan tata kelola keuangan yang transparan dan profesional."</p>
+    <section class="py-24 container mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div class="bg-white p-8 md:p-12 rounded-[40px] shadow-sm border border-slate-100 relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-5">
+                    <i class="fa-solid fa-briefcase text-9xl"></i>
                 </div>
-                <div class="bg-blue-50 p-8 rounded-2xl">
-                    <h3 class="text-2xl font-bold text-blue-600 mb-4">Misi</h3>
-                    <ul class="list-disc list-inside text-gray-700 space-y-2">
-                        <li>Menyediakan alat pencatatan keuangan yang mudah dan terjangkau.</li>
-                        <li>Membantu UMKM memahami kesehatan finansial bisnis mereka.</li>
-                        <li>Mempermudah proses administrasi perpajakan bagi pelaku usaha.</li>
+                <h2 class="text-3xl font-bold mb-6 text-slate-900 uppercase tracking-tight">Siapa Kami?</h2>
+                <p class="text-slate-600 leading-relaxed mb-6">
+                    <strong>BukuUsaha.id</strong> adalah platform layanan akuntansi berbasis sistem yang dirancang khusus untuk memenuhi standar pencatatan keuangan profesional tanpa kerumitan teknis. 
+                </p>
+                <p class="text-slate-600 leading-relaxed">
+                    Kami percaya bahwa data keuangan yang transparan adalah kunci utama bagi UMKM untuk mendapatkan akses permodalan, mengoptimalkan profit, dan naik kelas ke skala yang lebih besar.
+                </p>
+            </div>
+
+            <div class="space-y-8">
+                <div class="inline-block px-4 py-1 bg-red-50 text-red-600 rounded-full text-xs font-bold uppercase tracking-widest">The Problem</div>
+                <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900">Kenapa Kami Ada?</h2>
+                <div class="flex gap-6">
+                    <div class="flex-shrink-0 w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-xl shadow-inner">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2">Masalah Klasik UMKM</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">Banyak UMKM yang usahanya sangat potensial, namun terhambat karena manajemen kas yang berantakan, nota yang hilang, dan tidak adanya laporan keuangan bulanan yang jelas.</p>
+                    </div>
+                </div>
+                <div class="flex gap-6">
+                    <div class="flex-shrink-0 w-12 h-12 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center text-xl shadow-inner">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg mb-2">Solusi Digital Kami</h4>
+                        <p class="text-slate-500 text-sm leading-relaxed">Kami hadir untuk memutus rantai kerumitan tersebut dengan menyediakan sistem pencatatan yang semudah mengirim pesan teks namun seakurat software akuntansi perusahaan besar.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-slate-50 border-y border-slate-200">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="p-10 bg-gradient-soft rounded-[30px] text-white shadow-xl shadow-blue-200">
+                    <h3 class="text-sm font-bold uppercase tracking-[0.2em] mb-4 opacity-80">Visi Kami</h3>
+                    <p class="text-2xl md:text-3xl font-extrabold leading-tight">
+                        "Menjadi ekosistem akuntansi digital nomor satu yang memberdayakan jutaan UMKM Indonesia untuk mandiri secara finansial."
+                    </p>
+                </div>
+                <div class="p-10 bg-white rounded-[30px] border border-slate-100 shadow-sm">
+                    <h3 class="text-sm font-bold text-blue-600 uppercase tracking-[0.2em] mb-6">Misi Kami</h3>
+                    <ul class="space-y-6">
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center font-bold text-sm">01</span>
+                            <p class="text-slate-600 text-sm font-medium">Menyediakan platform akuntansi yang aman, handal, dan mudah diakses dari perangkat apapun.</p>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center font-bold text-sm">02</span>
+                            <p class="text-slate-600 text-sm font-medium">Menyederhanakan proses pelaporan keuangan agar UMKM siap menghadapi standar perbankan dan perpajakan.</p>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <span class="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center font-bold text-sm">03</span>
+                            <p class="text-slate-600 text-sm font-medium">Memberikan edukasi literasi keuangan berkelanjutan bagi seluruh pengguna platform kami.</p>
+                        </li>
                     </ul>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <h2 class="text-3xl font-bold text-center mb-12">Nilai Utama Kami</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <div>
-                    <div class="text-4xl mb-4">🛡️</div>
-                    <h4 class="font-bold text-xl mb-2">Integritas</h4>
-                    <p class="text-gray-600">Menjaga keamanan dan privasi data keuangan Anda dengan standar terbaik.</p>
+    <section class="py-24 container mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-extrabold text-slate-900 mb-4">Nilai-Nilai Utama Kami</h2>
+            <div class="w-20 h-1.5 bg-blue-600 mx-auto rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="card-hover p-10 bg-white rounded-3xl border border-slate-100 shadow-sm text-center">
+                <div class="w-20 h-20 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-6">
+                    <i class="fa-solid fa-eye"></i>
                 </div>
-                <div>
-                    <div class="text-4xl mb-4">⚡</div>
-                    <h4 class="font-bold text-xl mb-2">Kemudahan</h4>
-                    <p class="text-gray-600">Menyederhanakan proses akuntansi yang rumit menjadi lebih ramah pengguna.</p>
+                <h4 class="text-xl font-bold mb-3">Transparansi</h4>
+                <p class="text-slate-500 text-sm">Setiap rupiah yang tercatat dapat dilacak dengan jelas dan real-time tanpa ada data yang tersembunyi.</p>
+            </div>
+            <div class="card-hover p-10 bg-white rounded-3xl border border-slate-100 shadow-sm text-center">
+                <div class="w-20 h-20 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-6">
+                    <i class="fa-solid fa-shield"></i>
                 </div>
-                <div>
-                    <div class="text-4xl mb-4">🤝</div>
-                    <h4 class="font-bold text-xl mb-2">Kolaborasi</h4>
-                    <p class="text-gray-600">Terus mendengarkan kebutuhan pelaku usaha untuk inovasi berkelanjutan.</p>
+                <h4 class="text-xl font-bold mb-3">Keamanan Data</h4>
+                <p class="text-slate-500 text-sm">Privasi bisnis Anda adalah prioritas kami. Kami menggunakan enkripsi standar industri untuk melindungi data Anda.</p>
+            </div>
+            <div class="card-hover p-10 bg-white rounded-3xl border border-slate-100 shadow-sm text-center">
+                <div class="w-20 h-20 bg-green-50 text-green-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-6">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <h4 class="text-xl font-bold mb-3">Edukasi UMKM</h4>
+                <p class="text-slate-500 text-sm">Kami tidak hanya memberikan aplikasi, tapi juga membimbing Anda memahami makna di balik angka keuangan.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-blue-600 text-white mx-4 rounded-[50px] overflow-hidden relative">
+        <div class="absolute right-0 top-0 w-1/3 h-full bg-white opacity-5 skew-x-12 translate-x-20"></div>
+        <div class="container mx-auto px-10 flex flex-col md:flex-row items-center gap-12 relative z-10">
+            <div class="md:w-1/2">
+                <h2 class="text-3xl md:text-4xl font-extrabold mb-6 italic">Lebih dari Sekedar Aplikasi, Kami Adalah Pendamping.</h2>
+                <p class="text-blue-100 leading-relaxed">
+                    Kami menyadari bahwa sistem saja tidak cukup. Pendekatan kami menggabungkan kecanggihan teknologi dengan pendampingan berbasis komunitas, sehingga Anda tidak pernah merasa sendirian dalam mengelola bisnis.
+                </p>
+            </div>
+            <div class="md:w-1/2 grid grid-cols-1 gap-4">
+                <div class="p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+                    <h5 class="font-bold mb-1">🤝 Community Support</h5>
+                    <p class="text-xs text-blue-100">Bergabunglah dengan grup diskusi sesama pengusaha.</p>
+                </div>
+                <div class="p-6 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+                    <h5 class="font-bold mb-1">📈 Business Coaching</h5>
+                    <p class="text-xs text-blue-100">Sesi konsultasi rutin untuk menganalisis pertumbuhan laba Anda.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-gray-100 py-10 text-center text-gray-500 text-sm">
-        &copy; 2025 BukuUsaha.id. Semua Hak Dilindungi.
+    <section class="py-32 container mx-auto px-6 text-center">
+        <div class="max-w-2xl mx-auto">
+            <h2 class="text-3xl font-extrabold text-slate-900 mb-6">Melangkah ke Masa Depan</h2>
+            <p class="text-slate-500 leading-relaxed italic">
+                "Kami terus berinovasi untuk menghadirkan fitur Artificial Intelligence yang mampu memprediksi arus kas Anda di masa depan dan integrasi otomatis dengan layanan perbankan syariah maupun konvensional. Perjalanan BukuUsaha.id baru saja dimulai."
+            </p>
+        </div>
+    </section>
+
+    <footer class="bg-white border-t border-slate-100 pt-20 pb-10">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
+                <div>
+                    <a href="#" class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">BukuUsaha.id</a>
+                    <p class="mt-4 text-slate-500 text-sm leading-relaxed">Solusi akuntansi modern untuk UMKM Indonesia naik kelas.</p>
+                </div>
+                <div>
+                    <h5 class="font-bold mb-6 text-slate-900 uppercase text-xs tracking-widest">Tautan Cepat</h5>
+                    <div class="flex flex-col gap-4 text-sm font-medium text-slate-500">
+                        <a href="index.php" class="hover:text-blue-600 transition">Beranda</a>
+                        <a href="layanan.php" class="hover:text-blue-600 transition">Layanan</a>
+                        <a href="kontak.php" class="hover:text-blue-600 transition">Kontak</a>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="font-bold mb-6 text-slate-900 uppercase text-xs tracking-widest">Kontak</h5>
+                    <p class="text-sm text-slate-500 mb-2">support@bukuusaha.id</p>
+                    <p class="text-sm text-slate-500">+62 812 3456 7890</p>
+                </div>
+            </div>
+            <div class="border-t border-slate-100 pt-10 text-center">
+                <p class="text-slate-400 text-xs font-medium uppercase tracking-widest">
+                    &copy; 2025 BukuUsaha.id. Tugas Proyek Web Layanan Akuntansi UMKM.
+                </p>
+            </div>
+        </div>
     </footer>
+
 </body>
 </html>
