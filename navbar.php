@@ -1,3 +1,8 @@
+<?php
+// Mendapatkan nama file yang sedang dibuka
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,10 +31,10 @@
             </a>
             
             <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
-                <a href="index.php" class="hover:text-blue-600 transition">Beranda</a>
-                <a href="dashboard.php" class="hover:text-blue-600 transition">Layanan</a>
-                <a href="tentang.php" class="hover:text-blue-600 transition">Tentang Kami</a>
-                <a href="kontak.php" class="hover:text-blue-600 transition">Kontak</a>
+                <a href="index.php" class="text-sm font-bold transition <?= $current_page == 'index.php' ? 'text-blue-600' : 'text-slate-600 hover:text-blue-600' ?>">Beranda</a>
+                <a href="layanan/dashboard.php" class="text-sm font-bold transition <?= $current_page == 'layanan/dashboard.php' ? 'text-blue-600' : 'text-slate-600 hover:text-blue-600' ?>">Layanan</a>
+                <a href="tentang.php" class="text-sm font-bold transition <?= $current_page == 'tentang.php' ? 'text-blue-600' : 'text-slate-600 hover:text-blue-600' ?>">Tentang Kami</a>
+                <a href="kontak.php" class="text-sm font-bold transition <?= $current_page == 'kontak.php' ? 'text-blue-600' : 'text-slate-600 hover:text-blue-600' ?>">Kontak</a>
             </div>
     
             <div class="flex items-center gap-4">
@@ -37,8 +42,8 @@
                     <a href="layanan/dashboard.php" class="bg-gradient-custom text-white px-6 py-2.5 rounded-xl font-bold hover:opacity-90 transition shadow-lg shadow-blue-200">Dashboard</a>
                     <a href="logout.php" class="hidden md:block font-bold text-red-500 hover:text-red-700 transition">Logout</a>
                 <?php else: ?>
-                    <a href="login.php" class="hidden md:block font-bold text-slate-600 hover:text-blue-600 transition">Masuk</a>
-                    <a href="register.php" class="bg-gradient-custom text-white px-6 py-2.5 rounded-xl font-bold hover:scale-105 transition shadow-lg shadow-blue-200">Daftar</a>
+                    <a href="akun/login.php" class="hidden md:block font-bold text-slate-600 hover:text-blue-600 transition">Masuk</a>
+                    <a href="akun/register.php" class="bg-gradient-custom text-white px-6 py-2.5 rounded-xl font-bold hover:scale-105 transition shadow-lg shadow-blue-200">Daftar</a>
                 <?php endif; ?>
                 
                 <button class="md:hidden text-slate-600" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
@@ -55,9 +60,9 @@
                 <a href="kontak.php">Kontak</a>
                 <hr>
                 <?php if(isset($_SESSION['user_id'])): ?>
-                    <a href="logout.php" class="text-center py-2 text-red-500">Logout</a>
+                    <a href="akun/logout.php" class="text-center py-2 text-red-500">Logout</a>
                 <?php else: ?>
-                    <a href="login.php" class="text-center py-2">Masuk</a>
+                    <a href="akun/login.php" class="text-center py-2">Masuk</a>
                 <?php endif; ?>
             </div>
         </div>

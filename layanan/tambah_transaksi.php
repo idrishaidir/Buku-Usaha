@@ -33,9 +33,6 @@ $user_id = $_SESSION['user_id'];
                     <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Catat Transaksi Baru</h1>
                     <p class="text-slate-500 text-sm mt-1">Lengkapi detail informasi umum dan lampiran bukti untuk pencatatan otomatis.</p>
                 </div>
-                <a href="dashboard.php" class="text-blue-600 font-bold text-sm hover:underline">
-                    <i class="fa-solid fa-arrow-left mr-2"></i>Kembali ke Dashboard
-                </a>
             </div>
 
             <form action="proses_transaksi.php" method="POST" enctype="multipart/form-data">

@@ -114,13 +114,7 @@ session_start();
         </div>
     </section>
 
-    <footer class="bg-white border-t border-slate-100 pt-20 pb-10">
-        <div class="container mx-auto px-6 text-center">
-            <p class="text-slate-400 text-xs font-medium uppercase tracking-widest">
-                &copy; 2025 BukuUsaha.id. Tugas Proyek Web Layanan Akuntansi UMKM.
-            </p>
-        </div>
-    </footer>
+    <?php include 'footer.php'; ?>
 
     <a href="https://wa.me/6281234567890" target="_blank" class="fixed bottom-8 right-8 w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center text-2xl shadow-2xl hover:scale-110 active:scale-90 transition z-[60]">
         <i class="fa-brands fa-whatsapp"></i>

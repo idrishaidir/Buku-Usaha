@@ -50,6 +50,18 @@ for ($i = 1; $i <= $jumlah_hari; $i++) {
 
 // 2. Ambil 5 Transaksi Terbaru
 $query_terbaru = mysqli_query($conn, "SELECT * FROM transaksi WHERE user_id = '$user_id' ORDER BY tanggal DESC LIMIT 5");
+
+// Ambil data kategori pengeluaran bulan ini
+$cat_labels = [];
+$cat_values = [];
+$query_cat = mysqli_query($conn, "SELECT kategori, SUM(nominal) as total FROM transaksi 
+                                  WHERE user_id = '$user_id' AND jenis_transaksi = 'pengeluaran' 
+                                  AND tanggal LIKE '$bulan_ini%' GROUP BY kategori");
+
+while($row = mysqli_fetch_assoc($query_cat)) {
+    $cat_labels[] = $row['kategori'];
+    $cat_values[] = (float)$row['total'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -173,6 +185,12 @@ $query_terbaru = mysqli_query($conn, "SELECT * FROM transaksi WHERE user_id = '$
                         </div>
                         <p class="text-[10px] text-slate-400 italic">*Pemasukan dibandingkan total volume transaksi</p>
                     </div>
+                    <div class="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm">
+                        <h3 class="font-bold text-slate-800 text-lg mb-6">Distribusi Pengeluaran</h3>
+                        <div class="h-[300px]">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
                 </div>
 
                 
@@ -215,6 +233,23 @@ $query_terbaru = mysqli_query($conn, "SELECT * FROM transaksi WHERE user_id = '$
             }
         }
     });
+
+    new Chart(document.getElementById('categoryChart'), {
+    type: 'doughnut',
+    data: {
+        labels: <?= json_encode($cat_labels) ?>,
+        datasets: [{
+            data: <?= json_encode($cat_values) ?>,
+            backgroundColor: ['#3b82f6', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'],
+            borderWidth: 0
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom' } }
+    }
+});
     </script>
 </body>
 </html>

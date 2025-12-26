@@ -171,34 +171,7 @@ session_start();
         </div>
     </section>
 
-    <footer class="bg-white border-t border-slate-100 pt-20 pb-10">
-        <div class="container mx-auto px-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
-                <div>
-                    <a href="#" class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">BukuUsaha.id</a>
-                    <p class="mt-4 text-slate-500 text-sm leading-relaxed">Solusi akuntansi modern untuk UMKM Indonesia naik kelas.</p>
-                </div>
-                <div>
-                    <h5 class="font-bold mb-6 text-slate-900 uppercase text-xs tracking-widest">Tautan Cepat</h5>
-                    <div class="flex flex-col gap-4 text-sm font-medium text-slate-500">
-                        <a href="index.php" class="hover:text-blue-600 transition">Beranda</a>
-                        <a href="layanan.php" class="hover:text-blue-600 transition">Layanan</a>
-                        <a href="kontak.php" class="hover:text-blue-600 transition">Kontak</a>
-                    </div>
-                </div>
-                <div>
-                    <h5 class="font-bold mb-6 text-slate-900 uppercase text-xs tracking-widest">Kontak</h5>
-                    <p class="text-sm text-slate-500 mb-2">support@bukuusaha.id</p>
-                    <p class="text-sm text-slate-500">+62 812 3456 7890</p>
-                </div>
-            </div>
-            <div class="border-t border-slate-100 pt-10 text-center">
-                <p class="text-slate-400 text-xs font-medium uppercase tracking-widest">
-                    &copy; 2025 BukuUsaha.id. Tugas Proyek Web Layanan Akuntansi UMKM.
-                </p>
-            </div>
-        </div>
-    </footer>
+    <?php include 'footer.php'; ?>
 
 </body>
 </html>

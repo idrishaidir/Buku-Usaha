@@ -26,23 +26,34 @@ if (isset($_POST['simpan'])) {
     $bukti_final = "";
 
     // Logika Upload File
+    // Bagian Logika Upload File di layanan/proses_transaksi.php
     if (isset($_FILES['bukti_transaksi']) && $_FILES['bukti_transaksi']['error'] === 0) {
         $nama_file   = $_FILES['bukti_transaksi']['name'];
         $tmp_name    = $_FILES['bukti_transaksi']['tmp_name'];
         $ukuran_file = $_FILES['bukti_transaksi']['size'];
         
+        // 1. Validasi Ekstensi
         $ekstensi_valid = ['jpg', 'jpeg', 'png', 'pdf'];
         $ekstensi       = strtolower(pathinfo($nama_file, PATHINFO_EXTENSION));
 
-        if (in_array($ekstensi, $ekstensi_valid) && $ukuran_file <= 2000000) {
-            // Buat folder otomatis jika belum ada
+        // 2. Validasi MIME Type (Lebih Aman)
+        $finfo      = finfo_open(FILEINFO_MIME_TYPE);
+        $mime_type  = finfo_file($finfo, $tmp_name);
+        $mime_valid = ['image/jpeg', 'image/png', 'application/pdf'];
+
+        // 3. Cek apakah ekstensi, MIME, dan ukuran (maks 2MB) sesuai
+        if (in_array($ekstensi, $ekstensi_valid) && in_array($mime_type, $mime_valid) && $ukuran_file <= 2000000) {
             if (!is_dir('uploads')) {
                 mkdir('uploads', 0777, true);
             }
 
             $bukti_final = uniqid() . "." . $ekstensi;
             move_uploaded_file($tmp_name, 'uploads/' . $bukti_final);
+        } else {
+            echo "<script>alert('Format file tidak didukung atau ukuran terlalu besar!'); window.history.back();</script>";
+            exit();
         }
+        finfo_close($finfo);
     }
 
     // Gunakan query yang sesuai dengan struktur tabel Anda

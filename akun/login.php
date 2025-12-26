@@ -24,7 +24,7 @@ if (isset($_POST['login'])) {
             
             // Gunakan session_write_close sebelum redirect untuk memastikan session tersimpan
             session_write_close();
-            header("Location: layanan.php");
+            header("Location: ../layanan/profil.php");
             exit();
         } else {
             $error = "Password salah!";

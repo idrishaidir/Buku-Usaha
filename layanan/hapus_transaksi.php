@@ -14,34 +14,34 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // 2. Validasi parameter ID transaksi
+// Perbaikan pada layanan/hapus_transaksi.php
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id_transaksi = mysqli_real_escape_string($conn, $_GET['id']);
+    $user_id = $_SESSION['user_id'];
 
-    // 3. Keamanan Berlapis: Pastikan transaksi yang dihapus adalah milik user yang login
-    // Ini mencegah User A menghapus transaksi User B hanya dengan menebak ID di URL
-    $check_owner = mysqli_query($conn, "SELECT id FROM transaksi WHERE id = '$id_transaksi' AND user_id = '$user_id'");
+    // 1. Ambil nama file bukti sebelum data dihapus
+    $query_file = mysqli_query($conn, "SELECT bukti_transaksi FROM transaksi WHERE id = '$id_transaksi' AND user_id = '$user_id'");
+    $data_file  = mysqli_fetch_assoc($query_file);
 
-    if (mysqli_num_rows($check_owner) === 1) {
-        // 4. Jalankan perintah hapus jika validasi kepemilikan sukses
+    if ($data_file) {
+        // 2. Jika ada file bukti, hapus dari folder uploads
+        if (!empty($data_file['bukti_transaksi'])) {
+            $path_file = "uploads/" . $data_file['bukti_transaksi'];
+            if (file_exists($path_file)) {
+                unlink($path_file); // Menghapus file fisik
+            }
+        }
+
+        // 3. Jalankan perintah hapus data di database
         $sql_delete = "DELETE FROM transaksi WHERE id = '$id_transaksi' AND user_id = '$user_id'";
         
         if (mysqli_query($conn, $sql_delete)) {
-            echo "<script>
-                    alert('Transaksi berhasil dihapus.');
-                    window.location.href = 'transaksi.php';
-                  </script>";
+            echo "<script>alert('Transaksi dan file bukti berhasil dihapus.'); window.location.href = 'riwayat_transaksi.php';</script>";
         } else {
-            echo "<script>
-                    alert('Gagal menghapus transaksi: " . mysqli_error($conn) . "');
-                    window.location.href = 'transaksi.php';
-                  </script>";
+            echo "<script>alert('Gagal menghapus data.'); window.location.href = 'riwayat_transaksi.php';</script>";
         }
     } else {
-        // Jika ID ditemukan tapi bukan milik user tersebut, atau ID tidak ada
-        echo "<script>
-                alert('Akses ditolak atau data tidak ditemukan!');
-                window.location.href = 'transaksi.php';
-              </script>";
+        echo "<script>alert('Akses ditolak!'); window.location.href = 'riwayat_transaksi.php';</script>";
     }
 } else {
     // Jika tidak ada ID yang dikirim

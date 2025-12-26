@@ -9,21 +9,46 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 $nama_usaha = $_SESSION['nama_usaha'];
+// ... (kode proteksi halaman tetap sama)
 
-// Ambil data filter
-$bulan_filter = isset($_GET['bulan']) ? mysqli_real_escape_string($conn, $_GET['bulan']) : date('Y-m');
+// 1. Ambil data filter
+$bln = isset($_GET['bulan_angka']) ? mysqli_real_escape_string($conn, $_GET['bulan_angka']) : '';
+$thn = isset($_GET['tahun']) ? mysqli_real_escape_string($conn, $_GET['tahun']) : date('Y');
 $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
 
-// Query Data untuk Tabel
-$query_sql = "SELECT * FROM transaksi WHERE user_id = '$user_id' AND tanggal LIKE '$bulan_filter%'";
-if ($search) $query_sql .= " AND (kategori LIKE '%$search%' OR deskripsi LIKE '%$search%')";
+// 2. Tentukan Mode Query & Label Periode
+if (empty($bln)) {
+    // MODE TAHUNAN (Jika bulan dikosongkan)
+    $query_sql = "SELECT * FROM transaksi WHERE user_id = '$user_id' AND YEAR(tanggal) = '$thn'";
+    $rekap_sql = "SELECT jenis_transaksi, SUM(nominal) as total FROM transaksi WHERE user_id = '$user_id' AND YEAR(tanggal) = '$thn' GROUP BY jenis_transaksi";
+    $label_periode = "Tahun " . $thn;
+} else {
+    // MODE BULANAN
+    $bulan_filter = $thn . "-" . $bln;
+    $query_sql = "SELECT * FROM transaksi WHERE user_id = '$user_id' AND tanggal LIKE '$bulan_filter%'";
+    $rekap_sql = "SELECT jenis_transaksi, SUM(nominal) as total FROM transaksi WHERE user_id = '$user_id' AND tanggal LIKE '$bulan_filter%' GROUP BY jenis_transaksi";
+    
+    // Buat nama bulan yang rapi untuk label
+    $nama_bulan = [
+        '01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' => 'April',
+        '05' => 'Mei', '06' => 'Juni', '07' => 'Juli', '08' => 'Agustus',
+        '09' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'
+    ];
+    $label_periode = $nama_bulan[$bln] . " " . $thn;
+}
+
+// 3. Tambahkan filter pencarian jika ada
+if ($search) {
+    $query_sql .= " AND (kategori LIKE '%$search%' OR deskripsi LIKE '%$search%')";
+}
+
 $query_sql .= " ORDER BY tanggal ASC";
 $result = mysqli_query($conn, $query_sql);
 
-// Hitung Total untuk Laporan PDF
+// 4. Hitung Total Rekap
 $total_masuk = 0;
 $total_keluar = 0;
-$rekap_query = mysqli_query($conn, "SELECT jenis_transaksi, SUM(nominal) as total FROM transaksi WHERE user_id = '$user_id' AND tanggal LIKE '$bulan_filter%' GROUP BY jenis_transaksi");
+$rekap_query = mysqli_query($conn, $rekap_sql);
 while($rekap = mysqli_fetch_assoc($rekap_query)) {
     if($rekap['jenis_transaksi'] == 'pemasukan') $total_masuk = $rekap['total'];
     else $total_keluar = $rekap['total'];
@@ -98,7 +123,29 @@ while($rekap = mysqli_fetch_assoc($rekap_query)) {
 
                 <div class="bg-white p-4 rounded-[24px] border border-slate-100 shadow-sm mb-8 filter-box">
                     <form method="GET" class="flex flex-col md:flex-row gap-4">
-                        <input type="month" name="bulan" value="<?= $bulan_filter ?>" class="px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none text-sm font-semibold text-slate-600">
+                        <select name="bulan_angka" class="px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none text-sm font-semibold text-slate-600">
+                            <option value="">-- Pilih Bulan --</option>
+                            <?php
+                            $bulan_nama = [
+                                '01' => 'Januari', '02' => 'Februari', '03' => 'Maret', '04' => 'April',
+                                '05' => 'Mei', '06' => 'Juni', '07' => 'Juli', '08' => 'Agustus',
+                                '09' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'
+                            ];
+                            $bulan_sekarang = isset($_GET['bulan_angka']) ? $_GET['bulan_angka'] : date('m');
+                            foreach ($bulan_nama as $angka => $nama) : ?>
+                                <option value="<?= $angka ?>" <?= $bulan_sekarang == $angka ? 'selected' : '' ?>><?= $nama ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        
+                        <select name="tahun" class="px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none text-sm font-semibold text-slate-600">
+                            <option value="">-- Pilih Tahun --</option>
+                            <?php 
+                            $tahun_pilihan = isset($_GET['tahun']) ? $_GET['tahun'] : date('Y');
+                            for($y = date('Y'); $y >= 2020; $y--): ?>
+                                <option value="<?= $y ?>" <?= $tahun_pilihan == $y ? 'selected' : '' ?>><?= $y ?></option>
+                            <?php endfor; ?>
+                        </select>
+                        
                         <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Cari transaksi..." class="flex-1 px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none text-sm">
                         <button type="submit" class="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold text-sm">Filter</button>
                     </form>
@@ -106,10 +153,10 @@ while($rekap = mysqli_fetch_assoc($rekap_query)) {
             </div>
 
             <div class="pdf-only">
-                <div class="pdf-header">
+               <div class="pdf-header">
                     <h1>LAPORAN ARUS KAS</h1>
                     <p class="font-bold"><?= strtoupper(htmlspecialchars($nama_usaha)) ?></p>
-                    <p>Periode: <?= date('F Y', strtotime($bulan_filter)) ?></p>
+                    <p>Periode: <?= $label_periode ?></p>
                 </div>
 
                 <table class="pdf-table">
@@ -191,22 +238,31 @@ while($rekap = mysqli_fetch_assoc($rekap_query)) {
                                 <?= $row['jenis_transaksi'] == 'pemasukan' ? '+' : '-' ?> Rp <?= number_format($row['nominal'], 0, ',', '.') ?>
                             </td>
                             <td class="px-6 py-5 text-center">
-                                    <?php if(!empty($row['bukti_transaksi'])): ?>
-                                        <?php 
-                                        $ext = strtolower(pathinfo($row['bukti_transaksi'], PATHINFO_EXTENSION));
-                                        if($ext == 'pdf'): ?>
-                                            <a href="uploads/<?= $row['bukti_transaksi'] ?>" target="_blank" class="text-red-500 text-lg hover:scale-110 transition inline-block">
-                                                <i class="fa-solid fa-file-pdf"></i>
-                                            </a>
-                                        <?php else: ?>
-                                            <img src="uploads/<?= $row['bukti_transaksi'] ?>" 
-                                                 onclick="openModal(this.src)"
-                                                 class="w-10 h-10 object-cover rounded-lg cursor-pointer border border-slate-200 hover:scale-110 transition shadow-sm mx-auto">
-                                        <?php endif; ?>
+                                <?php if(!empty($row['bukti_transaksi'])): ?>
+                                    <?php 
+                                    $ext = strtolower(pathinfo($row['bukti_transaksi'], PATHINFO_EXTENSION));
+                                    // Gunakan path 'uploads/' karena folder ini berada di dalam folder 'layanan' 
+                                    // yang sama dengan file riwayat_transaksi.php
+                                    $file_path = 'uploads/' . $row['bukti_transaksi']; 
+                                    ?>
+                                    
+                                    <?php if($ext == 'pdf'): ?>
+                                        <a href="<?= $file_path ?>" target="_blank" class="text-red-500 text-lg hover:scale-110 transition inline-block">
+                                            <i class="fa-solid fa-file-pdf"></i>
+                                        </a>
                                     <?php else: ?>
-                                        <i class="fa-solid fa-image-slash text-slate-200"></i>
+                                        <?php if(file_exists($file_path)): ?>
+                                            <img src="<?= $file_path ?>" 
+                                                onclick="window.open(this.src)" 
+                                                class="w-10 h-10 object-cover rounded-lg cursor-pointer border border-slate-200 hover:scale-110 transition shadow-sm mx-auto">
+                                        <?php else: ?>
+                                            <i class="fa-solid fa-image-slash text-slate-200" title="File tidak ditemukan"></i>
+                                        <?php endif; ?>
                                     <?php endif; ?>
-                                </td>
+                                <?php else: ?>
+                                    <i class="fa-solid fa-image-slash text-slate-200"></i>
+                                <?php endif; ?>
+                            </td>
                             <td class="px-6 py-4 text-center">
                                 <a href="edit_transaksi.php?id=<?= $row['id'] ?>" class="text-blue-500 hover:text-blue-700 px-2"><i class="fa-solid fa-pen"></i></a>
                                 <button onclick="confirmDelete(<?= $row['id'] ?>)" class="text-red-500 hover:text-red-700 px-2"><i class="fa-solid fa-trash"></i></button>
