@@ -1,7 +1,6 @@
 <?php 
 include '../config/database.php';
 
-// Proteksi Halaman
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../akun/login.php");
     exit();
@@ -141,12 +140,12 @@ if (!isset($_SESSION['user_id'])) {
             const item = button.parentElement;
             const isOpen = item.classList.contains('accordion-open');
             
-            // Tutup semua accordion yang sedang terbuka (Optional)
+
             document.querySelectorAll('.accordion-item').forEach(el => {
                 el.classList.remove('accordion-open');
             });
 
-            // Toggle item yang diklik
+
             if (!isOpen) {
                 item.classList.add('accordion-open');
             }

@@ -1,7 +1,7 @@
 <?php 
 include '../config/database.php';
 
-// Proteksi Halaman
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../akun/login.php");
     exit();
@@ -9,11 +9,11 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Ambil ID dari URL dan pastikan datanya ada
+
 if (isset($_GET['id'])) {
     $id = mysqli_real_escape_string($conn, $_GET['id']);
     
-    // Validasi kepemilikan: Pastikan data yang diedit milik user yang sedang login
+
     $query = mysqli_query($conn, "SELECT * FROM transaksi WHERE id = '$id' AND user_id = '$user_id'");
     $data = mysqli_fetch_assoc($query);
 
@@ -26,24 +26,25 @@ if (isset($_GET['id'])) {
     exit();
 }
 
-// Proses Update Data
-// Proses Update Data di layanan/edit_transaksi.php
+
 if (isset($_POST['update'])) {
     $tanggal   = mysqli_real_escape_string($conn, $_POST['tanggal']);
-    $nominal   = mysqli_real_escape_string($conn, $_POST['nominal']);
+    $nominal_mentah = $_POST['nominal'];
+    $nominal        = str_replace('.', '', $nominal_mentah); 
+    $nominal        = mysqli_real_escape_string($conn, $nominal);
     $kategori  = mysqli_real_escape_string($conn, $_POST['kategori']);
     $metode    = mysqli_real_escape_string($conn, $_POST['metode']);
     $deskripsi = mysqli_real_escape_string($conn, $_POST['deskripsi']);
     $jenis     = mysqli_real_escape_string($conn, $_POST['jenis_transaksi']);
     
-    // Default gunakan bukti lama
+
     $bukti_final = $data['bukti_transaksi'];
 
-    // Cek apakah user mengunggah file baru
+
     if (isset($_FILES['bukti_transaksi']) && $_FILES['bukti_transaksi']['error'] === 0) {
         $target_dir = "uploads/";
         
-        // Buat folder jika belum ada (antisipasi)
+
         if (!is_dir($target_dir)) {
             mkdir($target_dir, 0777, true);
         }
@@ -58,11 +59,11 @@ if (isset($_POST['update'])) {
             $target_file = $target_dir . $nama_file_baru;
 
             if (move_uploaded_file($tmp_name, $target_file)) {
-                // Hapus file bukti lama dari folder jika ada file baru yang masuk
+
                 if (!empty($data['bukti_transaksi']) && file_exists($target_dir . $data['bukti_transaksi'])) {
                     unlink($target_dir . $data['bukti_transaksi']);
                 }
-                $bukti_final = $nama_file_baru; // Update variabel untuk database
+                $bukti_final = $nama_file_baru; 
             }
         }
     }
@@ -171,14 +172,37 @@ if (isset($_POST['update'])) {
 
                             <div class="space-y-2 mb-6">
                                 <label class="text-sm font-semibold text-slate-700">Nominal (Rp)</label>
-                                <input type="number" name="nominal" required value="<?= (int)$data['nominal'] ?>" 
-                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition font-bold text-lg text-slate-800">
+                                <input type="text" id="inputNominal" name="nominal" required 
+                                    value="<?= number_format($data['nominal'], 0, ',', '.') ?>" 
+                                    class="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition font-bold text-lg text-slate-800">
                             </div>
 
                             <div class="space-y-2">
                                 <label class="text-sm font-semibold text-slate-700">Deskripsi / Memo</label>
                                 <textarea name="deskripsi" rows="4" class="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition text-sm"><?= htmlspecialchars($data['deskripsi']) ?></textarea>
                             </div>
+                        </div>
+
+                        
+                        <div class="block lg:hidden bg-white p-6 rounded-[24px] border border-slate-100 shadow-sm mb-6">
+                            <div class="flex items-center gap-2 mb-4 text-slate-500">
+                                <i class="fa-solid fa-paperclip"></i>
+                                <h3 class="font-bold uppercase tracking-widest text-xs">Bukti Transaksi</h3>
+                            </div>
+
+                            <div class="relative group bukti-card cursor-pointer border-2 border-dashed border-slate-200 rounded-[16px] p-6 text-center hover:border-blue-500 hover:bg-blue-50/50 transition duration-300">
+                                <input type="file" name="bukti_transaksi" accept="image/*,.pdf" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="previewFile(event)">
+                                <div class="space-y-4">
+                                    <div class="w-12 h-12 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto group-hover:bg-blue-100 group-hover:text-blue-600 transition">
+                                        <i class="fa-solid fa-cloud-arrow-up text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-700">Ganti Bukti Transaksi</p>
+                                        <p class="text-[11px] text-slate-400 mt-1 uppercase font-bold tracking-tighter">PDF / JPG / PNG (Maks 2MB)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="file-name mt-4 text-xs font-semibold text-blue-600 hidden text-center"></div>
                         </div>
 
                         <div class="flex justify-end pt-4">
@@ -190,7 +214,7 @@ if (isset($_POST['update'])) {
                     </div>
 
                     <div class="space-y-8">
-                        <div class="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm">
+                        <div class="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm hidden lg:block">
                             <div class="flex items-center gap-2 mb-8 text-slate-500">
                                 <i class="fa-solid fa-paperclip"></i>
                                 <h3 class="font-bold uppercase tracking-widest text-xs">Bukti Transaksi</h3>
@@ -213,9 +237,9 @@ if (isset($_POST['update'])) {
                             </div>
                             <?php endif; ?>
 
-                            <div class="relative group cursor-pointer border-2 border-dashed border-slate-200 rounded-[24px] p-8 text-center hover:border-blue-500 hover:bg-blue-50/50 transition duration-300">
+                            <div class="relative group bukti-card cursor-pointer border-2 border-dashed border-slate-200 rounded-[24px] p-8 text-center hover:border-blue-500 hover:bg-blue-50/50 transition duration-300">
                                 <input type="file" name="bukti_transaksi" accept="image/*,.pdf" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="previewFile(event)">
-                                <div id="preview-container" class="space-y-4">
+                                <div class="space-y-4">
                                     <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto group-hover:bg-blue-100 group-hover:text-blue-600 transition">
                                         <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
                                     </div>
@@ -225,7 +249,7 @@ if (isset($_POST['update'])) {
                                     </div>
                                 </div>
                             </div>
-                            <div id="file-name" class="mt-4 text-xs font-semibold text-blue-600 hidden text-center"></div>
+                            <div class="file-name mt-4 text-xs font-semibold text-blue-600 hidden text-center"></div>
                         </div>
 
                         <div class="bg-blue-50 p-6 rounded-[24px] border border-blue-100">
@@ -263,13 +287,28 @@ if (isset($_POST['update'])) {
         }
 
         function previewFile(event) {
-            const fileNameDisplay = document.getElementById('file-name');
-            const file = event.target.files[0];
-            if (file) {
+            const input = event.target;
+            const file = input.files[0];
+          
+            let container = input.closest('.bukti-card');
+            if (!container) container = input.parentElement;
+            const fileNameDisplay = container.querySelector('.file-name');
+            if (file && fileNameDisplay) {
                 fileNameDisplay.innerText = "File baru dipilih: " + file.name;
                 fileNameDisplay.classList.remove('hidden');
             }
         }
+
+        const inputNominal = document.getElementById('inputNominal');
+
+        inputNominal.addEventListener('input', function(e) {
+            let value = this.value.replace(/[^0-9]/g, '');
+            if (value !== "") {
+                this.value = new Intl.NumberFormat('id-ID').format(value);
+            } else {
+                this.value = "";
+            }
+        });
     </script>
 </body>
 </html>

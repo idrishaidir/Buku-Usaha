@@ -1,7 +1,7 @@
 <?php
 session_start();
-session_unset(); // Menghapus variabel session
-session_destroy(); // Menghancurkan session
+session_unset();
+session_destroy(); 
 header("Location: login.php");
 exit();
 ?>

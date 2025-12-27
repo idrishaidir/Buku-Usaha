@@ -1,7 +1,7 @@
 <?php 
 include '../config/database.php';
 
-// Proteksi Halaman
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../akun/login.php");
     exit();
@@ -11,7 +11,7 @@ $user_id = $_SESSION['user_id'];
 $nama_usaha = $_SESSION['nama_usaha'];
 $bulan_ini = date('Y-m');
 
-// 1. LOGIKA REKAP & GRAFIK (Bulan Ini)
+
 $total_masuk = 0;
 $total_keluar = 0;
 $data_harian = [];
@@ -35,7 +35,7 @@ while($rekap = mysqli_fetch_assoc($query_rekap)) {
     }
 }
 
-// Persiapan data Chart.js
+
 $labels_grafik = [];
 $data_masuk_grafik = [];
 $data_keluar_grafik = [];
@@ -48,10 +48,10 @@ for ($i = 1; $i <= $jumlah_hari; $i++) {
     $data_keluar_grafik[] = $data_harian[$tgl_cek]['keluar'] ?? 0;
 }
 
-// 2. Ambil 5 Transaksi Terbaru
-$query_terbaru = mysqli_query($conn, "SELECT * FROM transaksi WHERE user_id = '$user_id' ORDER BY tanggal DESC LIMIT 5");
 
-// Ambil data kategori pengeluaran bulan ini
+$query_terbaru = mysqli_query($conn, "SELECT * FROM transaksi WHERE user_id = '$user_id' ORDER BY tanggal DESC, id DESC LIMIT 5");
+
+
 $cat_labels = [];
 $cat_values = [];
 $query_cat = mysqli_query($conn, "SELECT kategori, SUM(nominal) as total FROM transaksi 

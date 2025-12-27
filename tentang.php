@@ -1,5 +1,4 @@
 <?php
-// Memulai session jika diperlukan (konsisten dengan halaman lain)
 session_start();
 ?>
 <!DOCTYPE html>

@@ -1,5 +1,4 @@
 <?php
-// Mendapatkan nama file yang sedang dibuka
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 
@@ -40,7 +39,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <div class="flex items-center gap-4">
                 <?php if(isset($_SESSION['user_id'])): ?>
                     <a href="layanan/dashboard.php" class="bg-gradient-custom text-white px-6 py-2.5 rounded-xl font-bold hover:opacity-90 transition shadow-lg shadow-blue-200">Dashboard</a>
-                    <a href="logout.php" class="hidden md:block font-bold text-red-500 hover:text-red-700 transition">Logout</a>
+                    <a href="akun/logout.php" class="hidden md:block font-bold text-red-500 hover:text-red-700 transition">Logout</a>
                 <?php else: ?>
                     <a href="akun/login.php" class="hidden md:block font-bold text-slate-600 hover:text-blue-600 transition">Masuk</a>
                     <a href="akun/register.php" class="bg-gradient-custom text-white px-6 py-2.5 rounded-xl font-bold hover:scale-105 transition shadow-lg shadow-blue-200">Daftar</a>

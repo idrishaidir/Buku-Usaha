@@ -1,5 +1,4 @@
 <?php
-// Memulai session untuk mengecek status login
 session_start();
 ?>
 <!DOCTYPE html>
@@ -44,7 +43,7 @@ session_start();
                     Ubah kerumitan pembukuan manual menjadi sistem digital yang otomatis dan akurat. Kendalikan profit bisnis Anda hanya dengan satu platform.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                    <a href="register.php" class="bg-gradient-custom text-white px-8 py-4 rounded-2xl font-bold text-lg hover:shadow-2xl hover:-translate-y-1 transition-all">
+                    <a href="akun/register.php" class="bg-gradient-custom text-white px-8 py-4 rounded-2xl font-bold text-lg hover:shadow-2xl hover:-translate-y-1 transition-all">
                         Mulai Kelola Keuangan <i class="fa-solid fa-arrow-right ml-2"></i>
                     </a>
                     <a href="#solusi" class="px-8 py-4 rounded-2xl font-bold text-lg text-slate-600 border border-slate-200 hover:bg-slate-50 transition">
@@ -221,7 +220,6 @@ session_start();
     <?php include 'footer.php'; ?>
 
     <script>
-        // Animasi Scroll Reveal Sederhana
         window.addEventListener('scroll', function() {
             const navbar = document.querySelector('nav div');
             if (window.scrollY > 50) {

@@ -1,13 +1,35 @@
 <?php 
-include '../config/database.php';
+include '../config/database.php'; 
 
-// Proteksi Halaman
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../akun/login.php");
     exit();
 }
 
-$user_id = $_SESSION['user_id'];
+if (isset($_POST['tambah_transaksi'])) {
+    $user_id = $_SESSION['user_id'];
+    $tanggal = mysqli_real_escape_string($conn, $_POST['tanggal']);
+    $kategori = mysqli_real_escape_string($conn, $_POST['kategori']);
+    $deskripsi = mysqli_real_escape_string($conn, $_POST['deskripsi']);
+    $jenis_transaksi = mysqli_real_escape_string($conn, $_POST['jenis_transaksi']);
+    
+    $nominal_mentah = $_POST['nominal'];
+    $nominal_bersih = str_replace('.', '', $nominal_mentah); 
+
+    $bukti = "";
+    if (!empty($_FILES['bukti_transaksi']['name'])) {
+        $nama_file = time() . '_' . $_FILES['bukti_transaksi']['name'];
+        move_uploaded_file($_FILES['bukti_transaksi']['tmp_name'], 'uploads/' . $nama_file);
+        $bukti = $nama_file;
+    }
+
+    $query = "INSERT INTO transaksi (user_id, tanggal, kategori, deskripsi, nominal, jenis_transaksi, bukti_transaksi) 
+              VALUES ('$user_id', '$tanggal', '$kategori', '$deskripsi', '$nominal_bersih', '$jenis_transaksi', '$bukti')";
+
+    if (mysqli_query($conn, $query)) {
+        echo "<script>alert('Transaksi berhasil dicatat!'); window.location='riwayat_transaksi.php';</script>";
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -91,8 +113,8 @@ $user_id = $_SESSION['user_id'];
 
                             <div class="space-y-2 mb-6">
                                 <label class="text-sm font-semibold text-slate-700">Nominal (Rp)</label>
-                                <input type="number" name="nominal" required placeholder="0" 
-                                       class="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition font-bold text-lg text-slate-800">
+                                <input type="text" id="inputNominal" name="nominal" required placeholder="0" 
+                                    class="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition font-bold text-lg text-slate-800">
                             </div>
 
                             <div class="space-y-2">
@@ -100,6 +122,27 @@ $user_id = $_SESSION['user_id'];
                                 <textarea name="deskripsi" rows="4" placeholder="Jelaskan detail transaksi (cth: Pembelian terigu 50kg)" 
                                           class="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition text-sm"></textarea>
                             </div>
+                        </div>
+
+                        <div class="block lg:hidden bg-white p-6 rounded-[24px] border border-slate-100 shadow-sm mb-6">
+                            <div class="flex items-center gap-2 mb-4 text-slate-500">
+                                <i class="fa-solid fa-paperclip"></i>
+                                <h3 class="font-bold uppercase tracking-widest text-xs">Bukti Transaksi</h3>
+                            </div>
+
+                            <div class="relative group bukti-card cursor-pointer border-2 border-dashed border-slate-200 rounded-[16px] p-6 text-center hover:border-blue-500 hover:bg-blue-50/50 transition duration-300">
+                                <input type="file" name="bukti_transaksi" accept="image/*,.pdf" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="previewFile(event)">
+                                <div class="space-y-4">
+                                    <div class="w-12 h-12 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto group-hover:bg-blue-100 group-hover:text-blue-600 transition">
+                                        <i class="fa-solid fa-cloud-arrow-up text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-700">Klik atau Drag File</p>
+                                        <p class="text-[11px] text-slate-400 mt-1 uppercase font-bold tracking-tighter">PDF / JPG / PNG (Maks 2MB)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="file-name mt-4 text-xs font-semibold text-blue-600 hidden text-center"></div>
                         </div>
 
                         <div class="flex justify-end pt-4">
@@ -111,15 +154,15 @@ $user_id = $_SESSION['user_id'];
                     </div>
 
                     <div class="space-y-8">
-                        <div class="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm">
+                        <div class="bg-white p-8 rounded-[32px] border border-slate-100 shadow-sm hidden lg:block">
                             <div class="flex items-center gap-2 mb-8 text-slate-500">
                                 <i class="fa-solid fa-paperclip"></i>
                                 <h3 class="font-bold uppercase tracking-widest text-xs">Bukti Transaksi</h3>
                             </div>
 
-                            <div class="relative group cursor-pointer border-2 border-dashed border-slate-200 rounded-[24px] p-8 text-center hover:border-blue-500 hover:bg-blue-50/50 transition duration-300">
+                            <div class="relative group bukti-card cursor-pointer border-2 border-dashed border-slate-200 rounded-[24px] p-8 text-center hover:border-blue-500 hover:bg-blue-50/50 transition duration-300">
                                 <input type="file" name="bukti_transaksi" accept="image/*,.pdf" class="absolute inset-0 opacity-0 cursor-pointer z-10" onchange="previewFile(event)">
-                                <div id="preview-container" class="space-y-4">
+                                <div class="space-y-4">
                                     <div class="w-16 h-16 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center mx-auto group-hover:bg-blue-100 group-hover:text-blue-600 transition">
                                         <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
                                     </div>
@@ -129,7 +172,7 @@ $user_id = $_SESSION['user_id'];
                                     </div>
                                 </div>
                             </div>
-                            <div id="file-name" class="mt-4 text-xs font-semibold text-blue-600 hidden text-center"></div>
+                            <div class="file-name mt-4 text-xs font-semibold text-blue-600 hidden text-center"></div>
                         </div>
 
                         <div class="bg-blue-50 p-6 rounded-[24px] border border-blue-100">
@@ -165,12 +208,40 @@ $user_id = $_SESSION['user_id'];
         }
 
         function previewFile(event) {
-            const fileNameDisplay = document.getElementById('file-name');
-            const file = event.target.files[0];
-            if (file) {
+            const input = event.target;
+            const file = input.files[0];
+            let container = input.closest('.bukti-card');
+            if (!container) container = input.parentElement;
+            const fileNameDisplay = container.querySelector('.file-name');
+            if (file && fileNameDisplay) {
                 fileNameDisplay.innerText = "File terpilih: " + file.name;
                 fileNameDisplay.classList.remove('hidden');
             }
+        }
+
+        const inputNominal = document.getElementById('inputNominal');
+
+        inputNominal.addEventListener('input', function(e) {
+            let value = this.value.replace(/[^0-9]/g, '');
+            
+            if (value !== "") {
+                this.value = formatRupiah(value);
+            } else {
+                this.value = "";
+            }
+        });
+
+        function formatRupiah(angka) {
+            let number_string = angka.toString(),
+                sisa = number_string.length % 3,
+                rupiah = number_string.substr(0, sisa),
+                ribuan = number_string.substr(sisa).match(/\d{3}/g);
+
+            if (ribuan) {
+                let separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+            return rupiah;
         }
     </script>
 </body>

@@ -137,26 +137,24 @@ include 'config/database.php';
     <?php include 'footer.php'; ?>
 
     <script>
-        // 1. Smooth Scroll (Sudah ada sebelumnya)
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 window.scrollTo({
-                    top: target.offsetTop - 120, // Offset agar tidak tertutup navbar
+                    top: target.offsetTop - 120, 
                     behavior: 'smooth'
                 });
             });
         });
 
-        // 2. Logic Bold on Scroll (Intersection Observer)
         const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('.clause-card, #perubahan, #kontak');
 
         const options = {
             root: null,
-            threshold: 0.5, // 50% bagian pasal harus terlihat di layar
-            rootMargin: "-100px 0px -40% 0px" // Penyesuaian area deteksi
+            threshold: 0.5, 
+            rootMargin: "-100px 0px -40% 0px" 
         };
 
         const observer = new IntersectionObserver((entries) => {
@@ -165,11 +163,9 @@ include 'config/database.php';
                     const id = entry.target.getAttribute('id');
                     
                     navLinks.forEach(link => {
-                        // Reset semua link ke gaya semula
                         link.classList.remove('text-blue-600', 'font-bold', 'scale-105', 'pl-2');
                         link.classList.add('text-slate-500', 'font-semibold');
                         
-                        // Aktifkan bold pada link yang sesuai dengan ID section
                         if (link.getAttribute('href') === '#' + id) {
                             link.classList.add('text-blue-600', 'font-bold', 'scale-105', 'pl-2');
                             link.classList.remove('text-slate-500', 'font-semibold');

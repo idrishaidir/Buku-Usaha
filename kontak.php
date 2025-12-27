@@ -1,5 +1,4 @@
 <?php
-// Memulai session untuk integrasi sistem login yang sudah ada
 session_start();
 ?>
 <!DOCTYPE html>

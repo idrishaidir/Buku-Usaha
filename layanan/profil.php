@@ -1,7 +1,6 @@
 <?php 
 include '../config/database.php';
 
-// Proteksi Halaman
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../akun/login.php");
     exit();
@@ -9,11 +8,9 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Ambil data terbaru dari database
 $query = mysqli_query($conn, "SELECT * FROM users WHERE id = '$user_id'");
 $user = mysqli_fetch_assoc($query);
 
-// Proses Update Data
 if (isset($_POST['update_profil'])) {
     $nama_usaha  = mysqli_real_escape_string($conn, $_POST['nama_usaha']);
     $jenis_usaha = mysqli_real_escape_string($conn, $_POST['jenis_usaha']);
@@ -24,7 +21,6 @@ if (isset($_POST['update_profil'])) {
     
     $foto_profil = $user['foto_profil']; 
 
-    // Logika Upload Foto Profil
     if (isset($_FILES['foto_profil']) && $_FILES['foto_profil']['error'] === 0) {
         $target_dir = "uploads/profiles/";
         if (!is_dir($target_dir)) {
@@ -38,7 +34,6 @@ if (isset($_POST['update_profil'])) {
         $allowed = ['jpg', 'jpeg', 'png'];
         if (in_array($ext, $allowed)) {
             if (move_uploaded_file($_FILES['foto_profil']['tmp_name'], $target_file)) {
-                // Hapus foto lama jika ada dan bukan inisial
                 if (!empty($user['foto_profil']) && file_exists($target_dir . $user['foto_profil'])) {
                     unlink($target_dir . $user['foto_profil']);
                 }

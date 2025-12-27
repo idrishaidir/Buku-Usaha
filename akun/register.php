@@ -1,9 +1,9 @@
 <?php 
-// 1. Integrasi Database
+
 include '../config/database.php';
 
 if (isset($_POST['register'])) {
-    // Tangkap data dan bersihkan
+   
     $nama_lengkap = mysqli_real_escape_string($conn, $_POST['nama_lengkap']);
     $email        = mysqli_real_escape_string($conn, $_POST['email']);
     $whatsapp     = mysqli_real_escape_string($conn, $_POST['whatsapp']);
@@ -11,11 +11,11 @@ if (isset($_POST['register'])) {
     $jenis_usaha  = mysqli_real_escape_string($conn, $_POST['jenis_usaha']);
     $skala_usaha  = mysqli_real_escape_string($conn, $_POST['skala_usaha']);
     
-    // Validasi Password Match
+
     if ($_POST['password'] !== $_POST['konfirmasi_password']) {
         $error = "Konfirmasi password tidak cocok!";
     } else {
-        // Hashing password untuk keamanan
+
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
         
         $sql = "INSERT INTO users (nama_lengkap, email, whatsapp, nama_usaha, jenis_usaha, skala_usaha, password) 
@@ -45,9 +45,11 @@ if (isset($_POST['register'])) {
 </head>
 <body class="bg-slate-50 min-h-screen flex items-center justify-center py-12 px-4 relative overflow-x-hidden">
 
-    <div class="absolute top-0 right-0 w-full h-full -z-0">
-        <div class="absolute top-[-10%] right-[-5%] w-96 h-96 bg-blue-100 rounded-full blur-[120px] opacity-60"></div>
-        <div class="absolute bottom-[-10%] left-[-5%] w-80 h-80 bg-purple-100 rounded-full blur-[100px] opacity-60"></div>
+    <div class="fixed top-6 left-6 z-50">
+        <a href="../index.php" class="flex items-center gap-2 px-5 py-2.5 bg-white/80 backdrop-blur-md border border-slate-200 text-slate-600 rounded-2xl font-bold text-sm shadow-sm hover:bg-white hover:text-blue-600 hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group">
+            <i class="fa-solid fa-arrow-left transition-transform group-hover:-translate-x-1"></i>
+            Kembali ke Beranda
+        </a>
     </div>
 
     <div class="w-full max-w-4xl relative z-10">
@@ -165,7 +167,7 @@ if (isset($_POST['register'])) {
                         
                         <label class="flex items-center gap-3 cursor-pointer group">
                             <input type="checkbox" required class="w-5 h-5 rounded-lg border-slate-300 text-blue-600 focus:ring-blue-500 transition-all">
-                            <span class="text-sm text-slate-500 group-hover:text-slate-700">Saya menyetujui <a href="#" class="text-blue-600 font-bold hover:underline">Syarat & Kebijakan Privasi</a> BukuUsaha.id</span>
+                            <span class="text-sm text-slate-500 group-hover:text-slate-700">Saya menyetujui <a href="../syarat-ketentuan.php" class="text-blue-600 font-bold hover:underline">Syarat & Kebijakan Privasi</a> BukuUsaha.id</span>
                         </label>
                     </div>
 
